@@ -36,16 +36,21 @@ inline bool intersect(const triangle &t, const vertex *vertices, const ray &ray,
 	if(beta < 0 || beta > 0){
 		return false;
 	}
-
-	float gamma = (A33*())/det;
-	if(gamma < 0 || gamma >1){
+	
+	float gamma = (A33*(A11*beta21 - beta11*A21) + A23*(beta11*A31 + A11*beta31) + A13*(A21*beta31 - beta21*A31))/det;
+	if(gamma < 0 || gamma >1 || (beta + gamma > 1)){
 		return false;
 	}
 
-	float tVal = 0;
-	
+	float tVal = (A32*(A11*beta21 - beta11*A21) + A23*(beta11*A31 + A11*beta31) * A12*(A21*beta31 - beta21*A31)) / det;
+	if(tVal < ray.t_min || tVal > ray.t_max){
+		return false;
+	}
 
+	info.t = tVal;
+	info.beta = beta;
+	info.gamma = gamma;
 
-	return false;
+	return true;
 }	
 
